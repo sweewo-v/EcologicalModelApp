@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcologicalModelApp.Console", "EcologicalModelApp.Console\EcologicalModelApp.Console.csproj", "{A03DB04D-ED64-49A9-B257-FEEA9ECE37CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EcologicalModelApp.Domain", "EcologicalModelApp.Domain\EcologicalModelApp.Domain.csproj", "{ACE30CA2-848B-4FBB-B907-9EE41B028EA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A03DB04D-ED64-49A9-B257-FEEA9ECE37CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A03DB04D-ED64-49A9-B257-FEEA9ECE37CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A03DB04D-ED64-49A9-B257-FEEA9ECE37CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A03DB04D-ED64-49A9-B257-FEEA9ECE37CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACE30CA2-848B-4FBB-B907-9EE41B028EA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACE30CA2-848B-4FBB-B907-9EE41B028EA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACE30CA2-848B-4FBB-B907-9EE41B028EA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACE30CA2-848B-4FBB-B907-9EE41B028EA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6036E8F4-630C-49CA-8806-DAE40400C00A}
+	EndGlobalSection
+EndGlobal
