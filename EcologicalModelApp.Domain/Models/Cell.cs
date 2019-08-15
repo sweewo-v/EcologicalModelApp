@@ -12,7 +12,7 @@ namespace EcologicalModelApp.Domain.Models
 
         protected readonly Ocean Ocean;
 
-        private readonly Random _random = new Random();
+        private static Random _random = new Random();
 
         public Cell(Ocean ocean)
         {

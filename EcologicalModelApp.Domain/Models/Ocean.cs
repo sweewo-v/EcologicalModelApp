@@ -19,7 +19,7 @@ namespace EcologicalModelApp.Domain.Models
 
         private readonly IList<Cell> _cells;
 
-        private readonly Random _random = new Random();
+        private static Random _random = new Random();
 
         public Ocean()
         {
@@ -134,7 +134,9 @@ namespace EcologicalModelApp.Domain.Models
             {
                 Display();
                 DisplayStats(i);
+
                 Thread.Sleep(500);
+
                 foreach (var cell in _cells.ToList())
                 {
                     if (!cell.IsDeleted)
@@ -142,6 +144,7 @@ namespace EcologicalModelApp.Domain.Models
                         cell.Process();
                     }
                 }
+
                 Clear();
             }
         }
