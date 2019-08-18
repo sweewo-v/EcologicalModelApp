@@ -1,4 +1,7 @@
-﻿namespace EcologicalModelApp.Domain.Models
+﻿using EcologicalModelApp.Domain.Extensions;
+using EcologicalModelApp.Domain.Interfaces;
+
+namespace EcologicalModelApp.Domain.Models
 {
     public class Predator : Prey
     {
@@ -6,7 +9,7 @@
 
         public static int DefaultTimeToFeed { get; set; } = 6;
 
-        public Predator(Ocean ocean) : base(ocean)
+        public Predator(IMovable ocean) : base(ocean)
         {
             DefaultImage = 'S';
             TimeToFeed = DefaultTimeToFeed;
@@ -18,16 +21,17 @@
 
             if (TimeToFeed <= 0)
             {
-                Ocean.CreateCell(new Cell(Ocean) { Coordinate = Coordinate });
+                Ocean.RemoveCellAt(Coordinate);
             }
             else
             {
-                Coordinate toCoordinate = GetSpecificNeighborCoordinate<Prey>();
+                Coordinate toCoordinate = this.GetSpecificNeighborCoordinate<Prey>(Ocean);
                 if (!toCoordinate.Equals(Coordinate))
                 {
                     TimeToFeed = DefaultTimeToFeed;
-                    Ocean.CreateCell(new Cell(Ocean) { Coordinate = toCoordinate });
-                    Ocean.SwapCell(this, toCoordinate);
+
+                    Ocean.RemoveCellAt(toCoordinate);
+                    Ocean.MoveCell(this, toCoordinate);
                 }
                 else
                 {

@@ -1,4 +1,7 @@
-﻿namespace EcologicalModelApp.Domain.Models
+﻿using EcologicalModelApp.Domain.Extensions;
+using EcologicalModelApp.Domain.Interfaces;
+
+namespace EcologicalModelApp.Domain.Models
 {
     public class Prey : Cell
     {
@@ -6,7 +9,7 @@
 
         public static int DefaultTimeToReproduce { get; set; } = 6;
 
-        public Prey(Ocean ocean) : base(ocean)
+        public Prey(IMovable ocean) : base(ocean)
         {
             DefaultImage = 'f';
         }
@@ -15,19 +18,20 @@
         {
             --TimeToReproduce;
 
-            Coordinate coordinate = GetSpecificNeighborCoordinate<Cell>();
+            Coordinate coordinate = this.GetSpecificNeighborCoordinate<Cell>(Ocean);
             if (!coordinate.Equals(Coordinate))
             {
                 if (TimeToReproduce <= 0)
                 {
                     TimeToReproduce = DefaultTimeToReproduce;
                     Cell child = Reproduce();
-                    Ocean.SwapCell(this, coordinate);
-                    Ocean.CreateCell(child);
+
+                    Ocean.MoveCell(this, coordinate);
+                    Ocean.AddCell(child);
                 }
                 else
                 {
-                    Ocean.SwapCell(this, coordinate);
+                    Ocean.MoveCell(this, coordinate);
                 }
             }
         }

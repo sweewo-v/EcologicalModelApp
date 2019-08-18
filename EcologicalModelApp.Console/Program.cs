@@ -1,4 +1,6 @@
-﻿using EcologicalModelApp.Domain.Models;
+﻿using EcologicalModelApp.Console.Services;
+using EcologicalModelApp.Domain.Interfaces;
+using EcologicalModelApp.Domain.Models;
 
 namespace EcologicalModelApp.Console
 {
@@ -6,9 +8,9 @@ namespace EcologicalModelApp.Console
     {
         static void Main()
         {
-            Ocean ocean = new Ocean();
-            ocean.Run(10);
-
+            IRunnable ocean1 = new Ocean(new ConsoleWriter(0, 0));
+            ocean1.Run(10);
+            
             System.Console.ReadKey();
         }
     }

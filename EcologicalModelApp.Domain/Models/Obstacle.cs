@@ -1,10 +1,16 @@
-﻿namespace EcologicalModelApp.Domain.Models
+﻿using EcologicalModelApp.Domain.Interfaces;
+
+namespace EcologicalModelApp.Domain.Models
 {
     class Obstacle : Cell
     {
-        public Obstacle(Ocean ocean) : base(ocean)
+        public Obstacle(IMovable ocean) : base(ocean)
         {
             DefaultImage = '#';
+        }
+
+        public override void Process()
+        {
         }
     }
 }

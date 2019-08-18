@@ -2,43 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using EcologicalModelApp.Domain.Extensions;
+using EcologicalModelApp.Domain.Interfaces;
+using EcologicalModelApp.Domain.Services;
 
 namespace EcologicalModelApp.Domain.Models
 {
-    public class Ocean
+    public class Ocean : IRunnable, IMovable
     {
         public uint NumRows { get; } = 25;
 
-        public uint NumCols { get; } = 70;
+        public uint NumCols { get; } = 50;
 
-        public uint NumPrey { get; set; } = 150;
+        public uint NumPrey { get; } = 150;
 
         public uint NumPredator { get; } = 100;
 
         public uint NumObstacle { get; } = 75;
 
-        private readonly IList<Cell> _cells;
+        private readonly List<Cell> _cells;
 
-        private static Random _random = new Random();
+        private static readonly Random Random = new Random();
 
-        public Ocean()
+        private readonly IWriter _writer;
+
+        public Ocean(IWriter writer)
         {
+            _writer = writer;
             _cells = new List<Cell>();
 
             InitCells();
         }
 
-        public Cell GetCell(Coordinate coordinate)
+        public Cell GetCellAt(Coordinate coordinate)
         {
-            return _cells.FirstOrDefault(c => c.Coordinate.Equals(coordinate) && !c.IsDeleted);
-        }
-
-        public void CreateCell(Cell cell)
-        {
-            Cell temp = GetCell(cell.Coordinate);
-            temp.IsDeleted = true;
-
-            _cells.Add(cell);
+            return _cells.FirstOrDefault(c => !c.IsDeleted
+                                              && c.Coordinate.Equals(coordinate));
         }
 
         private void Clear()
@@ -49,81 +48,27 @@ namespace EcologicalModelApp.Domain.Models
             }
         }
 
-        public void SwapCell(Cell cell, Coordinate coordinate)
+        public void AddCell(Cell cell)
         {
-            Cell temp = GetCell(coordinate);
+            _cells.Add(cell);
+        }
 
-            temp.Coordinate = cell.Coordinate;
+        public void MoveCell(Cell cell, Coordinate coordinate)
+        {
             cell.Coordinate = coordinate;
+        }
+
+        public void RemoveCellAt(Coordinate coordinate)
+        {
+            Cell cell = GetCellAt(coordinate);
+            cell.IsDeleted = true;
         }
 
         private void InitCells()
         {
-            AddEmptyCells();
-
-            AddCells<Obstacle>(NumObstacle);
-            AddCells<Predator>(NumPredator);
-            AddCells<Prey>(NumPrey);
-        }
-
-        private void AddCells<T>(uint count)
-            where T : Cell
-        {
-            for (int i = 0; i < count; i++)
-            {
-                Coordinate emptyCellCoordinate = GetEmptyCellCoordinate();
-
-                Cell emptyCell = GetCell(emptyCellCoordinate);
-                if (emptyCell != null)
-                {
-                    _cells.Remove(emptyCell);
-                }
-
-                T cell = (T)Activator.CreateInstance(typeof(T), this);
-                cell.Coordinate = emptyCellCoordinate;
-
-                _cells.Add(cell);
-            }
-        }
-
-        private Coordinate GetEmptyCellCoordinate()
-        {
-            Coordinate coordinate;
-
-            do
-            {
-                uint x = (uint)_random.Next(0, (int)NumCols);
-                uint y = (uint)_random.Next(0, (int)NumRows);
-
-                coordinate = new Coordinate(x, y);
-            } while (!GetCell(coordinate).IsEmpty());
-
-            return coordinate;
-        }
-
-        private void AddEmptyCells()
-        {
-            for (uint i = 0; i < NumRows; i++)
-            {
-                for (uint j = 0; j < NumCols; j++)
-                {
-                    _cells.Add(new Cell(this)
-                    {
-                        Coordinate = new Coordinate(j, i)
-                    });
-                }
-            }
-        }
-
-        public void Display()
-        {
-            foreach (var val in _cells)
-            {
-                Console.SetCursorPosition(
-                    (int)val.Coordinate.X,
-                    (int)val.Coordinate.Y);
-                Console.Write(val.DefaultImage);
-            }
+            _cells.AddRange(this.CreateSpecificCells<Obstacle>(NumObstacle));
+            _cells.AddRange(this.CreateSpecificCells<Prey>(NumPrey));
+            _cells.AddRange(this.CreateSpecificCells<Predator>(NumPredator));
         }
 
         public void Run(uint count)
@@ -132,6 +77,8 @@ namespace EcologicalModelApp.Domain.Models
                && _cells.Count(c => c.IsSpecificCell<Prey>()) > 0
                && _cells.Count(c => c.IsSpecificCell<Predator>()) > 0; i++)
             {
+                _writer.Clear();
+
                 Display();
                 DisplayStats(i);
 
@@ -148,17 +95,25 @@ namespace EcologicalModelApp.Domain.Models
                 Clear();
             }
         }
+        private void Display()
+        {
+            foreach (var val in _cells)
+            {
+                _writer.SetCursorPosition(
+                    (int)val.Coordinate.X,
+                    (int)val.Coordinate.Y);
+                _writer.Write(val.DefaultImage.ToString());
+            }
+        }
 
         private void DisplayStats(uint i)
         {
-            Console.SetCursorPosition(0, (int)NumRows + 1);
-            Console.Write(new string(' ', Console.WindowWidth));
-            Console.SetCursorPosition(0, (int)NumRows + 1);
+            _writer.SetCursorPosition(0, (int)NumRows + 1);
 
-            Console.Write($"Obstacle: {_cells.Count(c => c.IsSpecificCell<Obstacle>())}. ");
-            Console.Write($"Prey: {_cells.Count(c => c.IsSpecificCell<Prey>())}. ");
-            Console.Write($"Predator: {_cells.Count(c => c.IsSpecificCell<Predator>())}. ");
-            Console.WriteLine($"Iteration: {i}");
+            _writer.Write($"Obstacle: {_cells.Count(c => c.IsSpecificCell<Obstacle>())}. ");
+            _writer.Write($"Prey: {_cells.Count(c => c.IsSpecificCell<Prey>())}. ");
+            _writer.Write($"Predator: {_cells.Count(c => c.IsSpecificCell<Predator>())}. ");
+            _writer.WriteLine($"Iteration: {i}");
         }
     }
 }
