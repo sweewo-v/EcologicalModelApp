@@ -8,16 +8,16 @@ namespace EcologicalModelApp.Domain.Extensions
     {
         private static readonly Random Random = new Random();
 
-        public static T[] CreateSpecificCells<T>(this IMatrix matrix, uint count)
+        public static T[] CreateSpecificCells<T>(this IContainer container, uint count)
             where T : Cell
         {
             T[] cells = new T[count];
 
             for (int i = 0; i < count; i++)
             {
-                Coordinate emptyCellCoordinate = GetEmptyCellCoordinate(matrix);
+                Coordinate emptyCellCoordinate = GetEmptyCellCoordinate(container);
 
-                T cell = (T)Activator.CreateInstance(typeof(T), matrix);
+                T cell = (T)Activator.CreateInstance(typeof(T), container);
                 cell.Coordinate = emptyCellCoordinate;
 
                 cells[i] = cell;
@@ -26,17 +26,17 @@ namespace EcologicalModelApp.Domain.Extensions
             return cells;
         }
 
-        private static Coordinate GetEmptyCellCoordinate(IMatrix matrix)
+        private static Coordinate GetEmptyCellCoordinate(IContainer container)
         {
             Coordinate coordinate;
 
             do
             {
-                uint x = (uint)Random.Next(0, (int)matrix.NumCols);
-                uint y = (uint)Random.Next(0, (int)matrix.NumRows);
+                uint x = (uint)Random.Next(0, (int)container.NumCols);
+                uint y = (uint)Random.Next(0, (int)container.NumRows);
 
                 coordinate = new Coordinate(x, y);
-            } while (matrix.GetCellAt(coordinate) != null);
+            } while (container.GetCellAt(coordinate) != null);
 
             return coordinate;
         }

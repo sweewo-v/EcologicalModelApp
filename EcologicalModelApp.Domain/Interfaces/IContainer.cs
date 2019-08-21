@@ -2,7 +2,7 @@
 
 namespace EcologicalModelApp.Domain.Interfaces
 {
-    public interface IMatrix
+    public interface IContainer
     {
         uint NumRows { get; }
 

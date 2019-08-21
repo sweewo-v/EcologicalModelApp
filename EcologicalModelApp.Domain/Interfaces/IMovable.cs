@@ -2,7 +2,7 @@
 
 namespace EcologicalModelApp.Domain.Interfaces
 {
-    public interface IMovable : IMatrix
+    public interface IMovable : IContainer
     {
         void RemoveCellAt(Coordinate coordinate);
 
