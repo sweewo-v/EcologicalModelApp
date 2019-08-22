@@ -9,7 +9,7 @@ namespace EcologicalModelApp.Console
         static void Main()
         {
             IRunnable ocean1 = new Ocean(new ConsoleWriter(0, 0));
-            ocean1.Run(10);
+            ocean1.Run(100);
             
             System.Console.ReadKey();
         }

@@ -22,8 +22,6 @@ namespace EcologicalModelApp.Domain.Models
 
         private readonly List<Cell> _cells;
 
-        private static readonly Random Random = new Random();
-
         private readonly IWriter _writer;
 
         public Ocean(IWriter writer)

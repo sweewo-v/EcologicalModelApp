@@ -18,7 +18,7 @@ namespace EcologicalModelApp.Domain.Models
         {
             --TimeToReproduce;
 
-            Coordinate coordinate = this.GetSpecificNeighborCoordinate<Cell>(Ocean);
+            Coordinate coordinate = Ocean.GetSpecificNeighborCoordinate<Cell>(this);
             if (!coordinate.Equals(Coordinate))
             {
                 if (TimeToReproduce <= 0)

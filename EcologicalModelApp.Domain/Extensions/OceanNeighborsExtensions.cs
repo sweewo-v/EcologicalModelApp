@@ -10,7 +10,7 @@ namespace EcologicalModelApp.Domain.Extensions
         private static readonly Random Random = new Random();
 
         public static Coordinate GetSpecificNeighborCoordinate<T>
-            (this Cell cell, IContainer container) where T : Cell
+            (this IContainer container, Cell cell) where T : Cell
         {
             List<Coordinate> neighbors;
             List<Coordinate> neighborsCoordinates = new List<Coordinate>
@@ -74,7 +74,7 @@ namespace EcologicalModelApp.Domain.Extensions
             return coordinates;
         }
 
-        public static Coordinate GetNorthNeighbor(Coordinate coordinate, IContainer container)
+        private static Coordinate GetNorthNeighbor(Coordinate coordinate, IContainer container)
         {
             uint y = coordinate.Y;
             if (y < 1)
@@ -85,7 +85,7 @@ namespace EcologicalModelApp.Domain.Extensions
             return new Coordinate(coordinate.X, y - 1);
         }
 
-        public static Coordinate GetWestNeighbor(Coordinate coordinate, IContainer container)
+        private static Coordinate GetWestNeighbor(Coordinate coordinate, IContainer container)
         {
             uint x = coordinate.X;
             if (x < 1)
@@ -96,7 +96,7 @@ namespace EcologicalModelApp.Domain.Extensions
             return new Coordinate(x - 1, coordinate.Y);
         }
 
-        public static Coordinate GetSouthNeighbor(Coordinate coordinate, IContainer container)
+        private static Coordinate GetSouthNeighbor(Coordinate coordinate, IContainer container)
         {
             uint y = coordinate.Y + 1;
             if (y > container.NumRows - 1)
@@ -107,7 +107,7 @@ namespace EcologicalModelApp.Domain.Extensions
             return new Coordinate(coordinate.X, y);
         }
 
-        public static Coordinate GetEastNeighbor(Coordinate coordinate, IContainer container)
+        private static Coordinate GetEastNeighbor(Coordinate coordinate, IContainer container)
         {
             uint x = coordinate.X + 1;
             if (x > container.NumCols - 1)

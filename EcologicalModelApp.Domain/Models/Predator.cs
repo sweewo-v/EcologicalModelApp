@@ -25,7 +25,7 @@ namespace EcologicalModelApp.Domain.Models
             }
             else
             {
-                Coordinate toCoordinate = this.GetSpecificNeighborCoordinate<Prey>(Ocean);
+                Coordinate toCoordinate = Ocean.GetSpecificNeighborCoordinate<Prey>(this);
                 if (!toCoordinate.Equals(Coordinate))
                 {
                     TimeToFeed = DefaultTimeToFeed;
